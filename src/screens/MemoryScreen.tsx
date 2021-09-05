@@ -1,5 +1,5 @@
 import React from "react"
-import { NativeSyntheticEvent } from "react-native";
+import { NativeSyntheticEvent, _Image } from "react-native";
 import { View, Text, FlatList } from 'react-native'
 import { ScrollView, TextInput } from "react-native-gesture-handler"
 import { event } from "react-native-reanimated";
@@ -8,35 +8,32 @@ import GS from '../global/styles'
 import { MemoryItemProps } from "../types/MemoryItemProps";
 import { MemoryScreenProps } from "../types/MemoryScreenProps";
 
-const DATA: MemoryItemProps[] = [];
-
-const getItem = (data: any, index: number) => {
-    return {
-        id: Math.round(Math.random() * 10).toString(),
-        title: `Item ${index + 1}`
-    }
-};
-
 let stopFecthMore = true;
 
 const Item = (item: MemoryItemProps) => (
     <MemoryItem {...item} />
 );
 
-const getMore = (l: number) : Promise<number[]> => {
-    return new Promise((resolve, reject)=>{
+const getMore = (l: number): Promise<ItemType[]> => {
+    return new Promise((resolve, reject) => {
         setTimeout(() => {
-            const response = Array(10).map(_i => l + _i);
+            const response = Array<number>(10).fill(1).map((v, _i) => {
+                return { id: (l + _i + 1).toString() }
+            });
+            console.log('response', response)
             resolve(response);
         }, 1000);
     })
+}
+type ItemType = {
+    id: string
 }
 
 const MemoryScreen = ({ navigation }: MemoryScreenProps) => {
     const [keyword, setKeyword] = React.useState('');
     const [styleKeyword, setStyleKeyword] = React.useState([GS.textInputUI.default]);
     const [loadingMore, setLoadingMore] = React.useState(false);
-    const [items, setItems] = React.useState<number[]>([]);
+    const [items, setItems] = React.useState<ItemType[]>([]);
 
     const mapToItem: (id: number) => MemoryItemProps = (id) => (
         {
@@ -49,12 +46,13 @@ const MemoryScreen = ({ navigation }: MemoryScreenProps) => {
         }
     );
 
+    const featchData = async ()=>{
+        const response = await getMore(items.length);
+        setItems([...response]);
+    }
+
     React.useEffect(() => {
-        setLoadingMore(true);
-        getMore(0).then(rs => {
-            setItems(rs);
-            setLoadingMore(false);
-        })
+        featchData();
     }, [])
 
     const onEndReached = async ({ distanceFromEnd }: any) => {
@@ -83,14 +81,14 @@ const MemoryScreen = ({ navigation }: MemoryScreenProps) => {
             >
                 <FlatList
                     data={items}
-                    renderItem={({ item }) => <Item {...mapToItem(item)} />}
-                    keyExtractor={(item, index)=>index.toString()}
+                    renderItem={({ item }) => <Item {...mapToItem(+item.id)} />}
+                    keyExtractor={(item) => item.id}
+                    ListFooterComponent={() => loadingMore ? <Text style={{ marginBottom: 25, textAlign: "center" }}>Loading...</Text> : null}
                     onEndReached={_event => onEndReached(_event)}
                     onEndReachedThreshold={0.5}
                     onScrollBeginDrag={() => {
                         stopFecthMore = false;
                     }}
-                    ListFooterComponent={()=> loadingMore ? <Text style={{marginBottom: 25, textAlign: "center"}}>Loading...</Text> : null}
                 >
 
                 </FlatList>
