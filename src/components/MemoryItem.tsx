@@ -6,6 +6,7 @@ import GS from '../global/styles'
 import { StyleSheet } from 'react-native';
 import Divider from "./Divider"
 import { AntDesign } from "@expo/vector-icons"
+import SkeletonPlaceholder from "./SkeletonPlaceholder"
 
 const MemoryItem = ({ id, englishWord, vietnamWord, type, pronunciation, navigation }: MemoryItemProps) => {
 
@@ -46,4 +47,27 @@ const styles = StyleSheet.create({
     }
 })
 
-export default MemoryItem
+const MemoryLoadingItem = () => (
+    <View>
+        <SkeletonPlaceholder>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
+                <View>
+                    <View style={{ width: 120, height: 16, borderRadius: 4 }} />
+                    <View style={{ marginTop: 4, width: 80, height: 16, borderRadius: 4 }} />
+                </View>
+                <View style={{ width: 100, height: 16, borderRadius: 4 }} />
+                <View style={{ flexDirection: "row" }}>
+                    <View style={{ width: 20, height: 20, borderRadius: 20 / 2, marginRight: 15 }} />
+                    <View style={{ width: 20, height: 20, borderRadius: 20 / 2 }} />
+                </View>
+            </View>
+        </SkeletonPlaceholder>
+        <Divider />
+    </View>
+)
+
+
+export {
+    MemoryItem,
+    MemoryLoadingItem
+}

@@ -36,17 +36,19 @@ const flexUI = StyleSheet.create({
 const textInputUI = StyleSheet.create({
     default: {
         borderWidth: 1,
-        paddingHorizontal: 20,
-        paddingVertical: 13,
+        paddingHorizontal: 15,
+        paddingVertical: 15,
         borderRadius: 4,
         borderColor: '#ccc',
+        width: "100%"
     },
     focus: {
         borderWidth: 1,
-        paddingHorizontal: 20,
-        paddingVertical: 13,
+        paddingHorizontal: 15,
+        paddingVertical: 15,
         borderRadius: 4,
         borderColor: '#66afe9',
+        width: "100%"
     }
 })
 

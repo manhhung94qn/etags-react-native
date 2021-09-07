@@ -9,12 +9,13 @@ import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import 'react-native-gesture-handler';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import MainTabScreen from './src/screens/MainTabScreen';
-import { Ionicons } from '@expo/vector-icons';
-
+import { initDatabase, addNewWord } from './src/database'
+import { WordType } from './src/types/enums/WordType';
 
 const Drawer = createDrawerNavigator();
 
 export default function App() {
+  initDatabase();
   const [isDarkTheme, setIsDarkTheme] = React.useState(false);
   const CustomDefaultTheme = {
     ...NavigationDefaultTheme,

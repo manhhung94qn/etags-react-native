@@ -8,6 +8,7 @@ import TagScreen from './TagScreen';
 import { AntDesign, FontAwesome, FontAwesome5, Ionicons } from '@expo/vector-icons';
 import EditWordScreen from './EditWordScreen';
 import MemoryScreen from './MemoryScreen';
+import AddWordScreen from './AddWordScreen';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -21,7 +22,7 @@ const MainTabScreen = () => (
         }}
     >
         <Tab.Screen
-            name="Home"
+            name="Main"
             component={HomeStackScreen}
             options={{
                 tabBarLabel: 'Home',
@@ -88,7 +89,7 @@ const HomeStackScreen = ({ navigation }: StackScreenProp) => (
         />
         <HomeStack.Screen
             name="CreateWord"
-            component={EditWordScreen}
+            component={AddWordScreen}
             options={{
                 title: 'Thêm mới từ vựng',
                 headerRight: () => <Ionicons name="menu-outline" size={24} color="black" onPress={() => navigation.openDrawer()} />
@@ -104,9 +105,10 @@ const TagsStackScreen = ({ navigation }: StackScreenProp) => (
         screenOptions={stackNavigationOptions}
     >
         <TagsStack.Screen
-            name="Đây là từ gì?"
+            name="Tags"
             component={TagScreen}
             options={{
+                title: "Đây là từ gì?",
                 headerRight: () => (
                     <Ionicons name="menu-outline" size={24} color="black" onPress={() => navigation.openDrawer()} />
                 )
