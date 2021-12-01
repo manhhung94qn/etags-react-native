@@ -1,8 +1,10 @@
 import React from "react"
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Alert,ToastAndroid } from 'react-native'
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler"
 import GS from '../global/styles'
-import DropDownPicker from 'react-native-dropdown-picker';
+import Toast from 'react-native-root-toast';
+
+// import DropDownPicker from 'react-native-dropdown-picker';
 import { WordType } from "../types/enums/WordType";
 import { Input } from 'react-native-elements';
 import { UserGuid } from "../types/models/UserGuid";
@@ -11,14 +13,15 @@ import Divider from "../components/Divider";
 import { Button } from 'react-native-elements';
 import { Word } from "../types/models/Word";
 import { addNewWord } from "../database";
+import { Picker } from "@react-native-picker/picker";
 
 type Props = {
     navigation: any
 }
 
-const AddWordScreen = ({navigation}: Props) => {
+const AddWordScreen = ({ navigation }: Props) => {
     const [isOpenDropdownSelectTypeWord, setIsOpenDropdownSelectTypeWord] = React.useState(false);
-    const [selectTypeWord, setSelectTypeWord] = React.useState(null);
+    const [selectTypeWord, setSelectTypeWord] = React.useState<WordType | null>(WordType.noun);
     const wordTypes = [
         {
             label: 'Danh từ',
@@ -63,10 +66,23 @@ const AddWordScreen = ({navigation}: Props) => {
     }
     const addWord = async () => {
         word.type = selectTypeWord;
+        if(!word.english){
+            Alert.alert('Chưa nhập từ tiếng Anh.');
+            return;
+        }
+        if(!word.vietNam){
+            alert('Chưa nhập từ tiếng Việt.');
+            return;
+        }
+        if(!word.type){
+            alert('Chưa chọn loại từ.');
+            return;
+        }
         await addNewWord({
             word,
             userGuids
         });
+        Toast.show('Thêm từ mới thành công!');
         navigation.goBack()
     }
     return (
@@ -86,21 +102,20 @@ const AddWordScreen = ({navigation}: Props) => {
                         onChangeText={text => word.vietNam = text}
                     />
                 </View>
-                <View style={[styles.row, { marginBottom: 15, paddingHorizontal: 9 }]}>
-                    <DropDownPicker
-                        items={wordTypes}
-                        containerStyle={{ height: 60 }}
-                        placeholder="Chọn loại từ"
-                        open={isOpenDropdownSelectTypeWord}
-                        value={selectTypeWord}
-                        setOpen={setIsOpenDropdownSelectTypeWord}
-                        setValue={setSelectTypeWord}
-                    />
+                <View style={[styles.row, { paddingLeft: 2, marginBottom: 10 }]}>
+                    <Picker
+                        style={{ height: 50, width: '100%' }}
+                        mode="dialog"
+                        selectedValue={selectTypeWord}
+                        onValueChange={(itemValue, itemIndex) => setSelectTypeWord(itemValue)}
+                    >
+                        {wordTypes.map(x => <Picker.Item label={x.label} key={x.value} value={x.value} />)}
+                    </Picker>
                 </View>
                 <View style={[styles.row]}>
                     <Input
                         label="Phát âm"
-                        placeholder='Nhập cách phát âm ...'                        
+                        placeholder='Nhập cách phát âm ...'
                         onChangeText={text => word.pronuncation = text}
                     />
                 </View>

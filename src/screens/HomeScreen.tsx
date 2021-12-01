@@ -1,23 +1,33 @@
-import React from "react"
+import React, {useEffect, useState} from "react"
 import { View, Text,Image, StyleSheet } from 'react-native'
 import { TouchableOpacity } from "react-native-gesture-handler";
 import FloatingBottom from "../components/FloatingBottom";
 import GlobalStyle from '../global/styles'
-
+import { getRandomWord } from '../database'
+import { Word } from "../types/models/Word";
+import { AddNewWordType } from "../types/AddNewWordType";
 type StackScreenProp = {
     navigation: any
 };
 const HomeScreen = ({ navigation }: StackScreenProp) => {
     const image = { uri: "https://dictionary.cambridge.org/vi/images/thumb/lion_noun_002_21358.jpg?version=5.0.185" };
+    const [wordInfo, setWordInfo] = useState<AddNewWordType | undefined | null>();
+    const getNewWord = async () => {
+        const word = await getRandomWord();
+        setWordInfo(word);
+    }
+    useEffect(()=>{
+        getNewWord();
+    },[])
     return (
         <View style={GlobalStyle.uinitUI.container}>
             <View style={[GlobalStyle.flexUI.default, GlobalStyle.flexUI.alignCenter, GlobalStyle.flexUI.justifyCenter]}>
                 <Image source={image} resizeMode="contain" style={[styles.image]} />
-                <Text style={styles.title}>Lion</Text>
+                <Text style={styles.title}>{wordInfo?.word?.english}</Text>
                 <View style={[GlobalStyle.flexUI.default, GlobalStyle.flexUI.alignCenter, GlobalStyle.flexUI.justifyCenter]}>
-                    <Text style={styles.my2}>(verb)</Text>
-                    <Text style={styles.my2}>/im'pru:v/</Text>
-                    <Text style={styles.my2}>Cải tiến, cải thiện; trở nên tốt hơn</Text>
+                    <Text style={styles.my2}>({wordInfo?.word?.type})</Text>
+                    <Text style={styles.my2}>{wordInfo?.word?.pronuncation}</Text>
+                    <Text style={styles.my2}>{wordInfo?.word?.vietNam}</Text>
                 </View>
                 <View style={[GlobalStyle.flexUI.default, GlobalStyle.flexUI.justifyCenter]}>
                     <View style={styles.separator} />
@@ -36,7 +46,7 @@ const HomeScreen = ({ navigation }: StackScreenProp) => {
             </View>
             <View style={[GlobalStyle.flexUI.default, GlobalStyle.flexUI.alignCenter, GlobalStyle.flexUI.justifyCenter]}>
                 <TouchableOpacity
-                    onPress={() => { }}
+                    onPress={() => { getNewWord() }}
                 >
                     <View style={[GlobalStyle.flexUI.default, styles.rememberedBtn]}>
                         <Text style={{ margin: 0, marginRight: 5 }}>Remembered

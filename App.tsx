@@ -3,14 +3,13 @@ import {
   DefaultTheme as NavigationDefaultTheme,
   DarkTheme as NavigationDarkTheme
 } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import { StyleSheet, SafeAreaView } from 'react-native';
 import 'react-native-gesture-handler';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import MainTabScreen from './src/screens/MainTabScreen';
-import { initDatabase, addNewWord } from './src/database'
-import { WordType } from './src/types/enums/WordType';
+import { initDatabase } from './src/database'
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 const Drawer = createDrawerNavigator();
 
@@ -36,18 +35,20 @@ export default function App() {
   }
   const theme = isDarkTheme ? CustomDarkTheme : CustomDefaultTheme;
   return (
-    <SafeAreaView style={styles.container}>
-      <NavigationContainer theme={theme}>
-        <Drawer.Navigator screenOptions={{
-          headerTitleAlign: 'center',
-          drawerPosition: 'right',
-          headerShown: false
-        }}>
-          <Drawer.Screen
-            name="ETags" component={MainTabScreen} />
-        </Drawer.Navigator>
-      </NavigationContainer>
-    </SafeAreaView>
+    <RootSiblingParent>
+      <SafeAreaView style={styles.container}>
+        <NavigationContainer theme={theme}>
+          <Drawer.Navigator screenOptions={{
+            headerTitleAlign: 'center',
+            drawerPosition: 'right',
+            headerShown: false
+          }}>
+            <Drawer.Screen
+              name="ETags" component={MainTabScreen} />
+          </Drawer.Navigator>
+        </NavigationContainer>
+      </SafeAreaView>
+    </RootSiblingParent>
   );
 }
 

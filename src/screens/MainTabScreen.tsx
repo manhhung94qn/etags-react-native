@@ -1,6 +1,6 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { createStackNavigator, StackNavigationOptions, StackScreenProps } from '@react-navigation/stack';
+import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
 
 //Screen
 import HomeScreen from './HomeScreen';
@@ -132,14 +132,14 @@ const MemorieStackScreen = ({ navigation }: StackScreenProp) => (
                     <Ionicons name="menu-outline" size={24} color="black" onPress={() => navigation.openDrawer()} />
                 )
             }} />
-            <MemorieStack.Screen
-                name="EditWord"
-                component={EditWordScreen}
-                options={{
-                    title: "Chỉnh sửa",
-                    headerRight: () => (
-                        <Ionicons name="menu-outline" size={24} color="black" onPress={() => navigation.openDrawer()} />
-                    )
-                }} />
+        <MemorieStack.Screen
+            name="EditWord"
+            component={EditWordScreen}
+            options={{
+                title: "Chỉnh sửa",
+                headerRight: () => (
+                    <Ionicons name="menu-outline" size={24} color="black" onPress={() => navigation.openDrawer()} />
+                )
+            }} />
     </MemorieStack.Navigator>
 )

@@ -1,14 +1,11 @@
 import React from "react"
-import { NativeSyntheticEvent, StyleSheet, _Image } from "react-native";
-import { View, Text, FlatList } from 'react-native'
+import { StyleSheet, _Image } from "react-native";
+import { View, FlatList } from 'react-native'
 import { ScrollView, TextInput } from "react-native-gesture-handler"
-import { event } from "react-native-reanimated";
 import { MemoryItem, MemoryLoadingItem } from "../components/MemoryItem";
 import GS from '../global/styles'
 import { MemoryItemProps } from "../types/MemoryItemProps";
 import { MemoryScreenProps } from "../types/MemoryScreenProps";
-import SkeletonPlaceholder from "../components/SkeletonPlaceholder";
-import { AntDesign } from "@expo/vector-icons";
 import { getWordsByKeyword } from '../database'
 
 let stopFecthMore = true;
@@ -56,7 +53,8 @@ const MemoryScreen = ({ navigation }: MemoryScreenProps) => {
     const flatListEl = React.useRef<FlatList<ItemType>>(null);
 
     const featchData = async () => {
-        await getWordsByKeyword(null);
+        var words = await getWordsByKeyword(null);
+        console.log('words: ',words)
         const response = await getMore(items.length);
         setItems([...response]);
         setLoading(false);
